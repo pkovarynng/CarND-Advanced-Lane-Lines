@@ -321,28 +321,6 @@ def fit_polynomial(binary_warped, ym_per_pix, xm_per_pix):
     # Generate y values
     ploty = np.linspace(0, binary_warped.shape[0]-1, binary_warped.shape[0] )
 
-    # # Generate x values, too, for plotting
-    # left_fit = np.polyfit(lefty, leftx, 2)
-    # right_fit = np.polyfit(righty, rightx, 2)
-    # try:
-        # left_fitx = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
-        # right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
-    # except TypeError:
-        # # Avoids an error if `left` and `right_fit` are still none or incorrect
-        # print('The function failed to fit a line!')
-        # left_fitx = 1*ploty**2 + 1*ploty
-        # right_fitx = 1*ploty**2 + 1*ploty
-
-    ## Visualization ##
-    # Colors in the left and right lane regions
-    #out_img[lefty, leftx] = [255, 0, 0]
-    #out_img[righty, rightx] = [0, 0, 255]
-
-    ## Plots the left and right polynomials on the lane lines
-    #plt.plot(left_fitx, ploty, color='yellow')
-    #plt.plot(right_fitx, ploty, color='yellow')
-    #plt.show()
-    
     return ploty, left_fit_cr, right_fit_cr
 
 def measure_curvature_real(binary_warped):
@@ -400,20 +378,9 @@ def process_image(img):
     # Get the transformation matrix for the perspective transform
     M = cv2.getPerspectiveTransform(np.float32(srcpoints), dstpoints)
 
-    # ### TEST BEGIN
-    # dst_with_src_pts = dst.copy()
-    # # Draw source points on undistorted image
-    # cv2.polylines(dst_with_src_pts, [np.array([srcpoints], np.int32)], True, (255, 0, 0), thickness=2)
-    # # Warp the undestorted image
-    # warped_dst_with_src_pts = cv2.warpPerspective(dst_with_src_pts, M, (dst_with_src_pts.shape[1], dst_with_src_pts.shape[0]), flags=cv2.INTER_LINEAR)
-    # # Show undestorted and its warped image
-    # show('Undistorted Image with Src Pts', dst_with_src_pts, 'Warped Original with Src Pts', warped_dst_with_src_pts, cmap2=None)
-    # ### TEST END
-
     # Warp the combined binary image
     warped_combined = cv2.warpPerspective(combined, M, (dst.shape[1], dst.shape[0]), flags=cv2.INTER_LINEAR)
     #mpimg.imsave("my_warped_example.jpg", warped_combined, cmap="gray")
-    #show('Undistorted Image ('+fname+')', dst, 'Warped Binary', warped_combined)
 
     ### DRAWING ####
     # In pixel space
