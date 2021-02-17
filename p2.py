@@ -179,7 +179,27 @@ def s_threshold(img, thresh=(0, 255)):
     binary_output[(S > thresh[0]) & (S <= thresh[1])] = 1
     # 3) Return a binary image of threshold result
     return binary_output
+
+def get_binary_image(dst):
+    # Sobel kernel size: odd number, in order to smooth gradient measurements
+    ksize = 7
+
+    # Apply thresholding functions on the undistorted image
+    gradx = abs_sobel_thresh(dst, orient='x', sobel_kernel=ksize, thresh=(20, 100))
+    grady = abs_sobel_thresh(dst, orient='y', sobel_kernel=ksize, thresh=(20, 100))
+    mag_binary = mag_thresh(dst, sobel_kernel=ksize, mag_thresh=(30, 100))
+    dir_binary = dir_threshold(dst, sobel_kernel=ksize, thresh=(0.7, 1.3))
+    s_binary = s_threshold(dst, thresh=(90, 255))
     
+    # Combine the thresholding results
+    combined = np.zeros_like(dir_binary)
+    combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1)) | (s_binary == 1)] = 1
+
+    # # for testing only:
+    # show('Original Image', img, 'Undistorted Thresholded Binary', combined)
+    # show('Original Image', img, 'Undistorted Thresholded Binary', s_binary)
+    return combined
+        
 def hist(img):
     # Grab only the bottom half of the image and crop the sides also
     # Lane lines are likely to be mostly vertical nearest to the car
@@ -338,26 +358,6 @@ def measure_curvature_real(binary_warped):
     
     return left_curverad, right_curverad
 
-def get_binary_image(dst):
-    # Sobel kernel size: odd number, in order to smooth gradient measurements
-    ksize = 7
-
-    # Apply thresholding functions on the undistorted image
-    gradx = abs_sobel_thresh(dst, orient='x', sobel_kernel=ksize, thresh=(20, 100))
-    grady = abs_sobel_thresh(dst, orient='y', sobel_kernel=ksize, thresh=(20, 100))
-    mag_binary = mag_thresh(dst, sobel_kernel=ksize, mag_thresh=(30, 100))
-    dir_binary = dir_threshold(dst, sobel_kernel=ksize, thresh=(0.7, 1.3))
-    s_binary = s_threshold(dst, thresh=(90, 255))
-    
-    # Combine the thresholding results
-    combined = np.zeros_like(dir_binary)
-    combined[((gradx == 1) & (grady == 1)) | ((mag_binary == 1) & (dir_binary == 1)) | (s_binary == 1)] = 1
-
-    # # for testing only:
-    # show('Original Image', img, 'Undistorted Thresholded Binary', combined)
-    # show('Original Image', img, 'Undistorted Thresholded Binary', s_binary)
-    return combined
-    
 def process_image(img):
     '''
     Implements the pipeline - processes one image/frame
@@ -457,7 +457,7 @@ def test_on_images():
     '''
     Tests the pipeline on the provided test images
     '''
-    images = glob.glob('test_images/*.jpg')
+    images = glob.glob('test_images/test2.jpg')
     for fname in images:
         # Read in the test image
         img = mpimg.imread(fname)
