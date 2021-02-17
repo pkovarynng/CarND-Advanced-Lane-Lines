@@ -98,17 +98,17 @@ I verified that my perspective transform was working as expected by drawing `src
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-In line 400 in my `p2.py` I call my `fit_polynomial()` function that fits a 2nd order polynomial on the left and right lane lines. This is done by collecting the pixel points of the lines first, then calling the `np.polyfit()` function for each array of pixel points separately. To illustrate the result of this, I inserted the following image:
+In line 400 in my `p2.py` I call my `fit_polynomial()` function that fits a 2nd order polynomial on the left and right lane lines. This is done by collecting the pixel points of the lines first, then calling the `np.polyfit()` function for each of the two arrays of pixel points separately. To illustrate the result of this, I inserted the following image:
 
 ![alt text][image5]
 
-The yellow lines are the fitted polynomials. The pixel points of the left and the right lanes that were considered when fitting the polynomial are in red and in blue, respectively. The points were collected using the sliding window technique learned in this curse.
+The yellow lines are the fitted polynomials. The pixel points of the left and the right lanes that were considered for the polynomials are in red and in blue, respectively. The points in the above image were collected using the sliding window technique learned in this curse.
 
-The sliding window technique uses a histogram. In addition to using only the bottom half of the binary image for the histogram, as seen in the lectures, I also used a side margin. This can be seen from line 225 through 227 in `p2.py` in the `find_lane_pixels()` function.
+The sliding window technique uses a histogram. In addition to using only the bottom half of the binary image for the histogram, as I saw in the lectures, I used a side margin also. This can be seen from line 225 through 227 in the file `p2.py` in the `find_lane_pixels()` function.
 
-When processing the video, the sliding window technique is used only for the first frame. From the next frame on, the pixel points for the new polynomial are collected from a hard-coded margin of 50 pixels around the previous polynomial. This is implemented by the `search_around_poly()` function in my `p2.py` file.
+When processing the video, the sliding window technique is used only for the first frame. From the next frame on, the pixel points for the new polynomials are collected from a hard-coded margin of 50 pixels around the previous polynomials. This is implemented by the `search_around_poly()` function in my `p2.py` file.
 
-The decision if there is a previous polynomial to be used and which of the two functions mentioned above should be called is made in function `get_lane_line_pixels` in my `p2.py` file.
+The decision about which of the two functions mentioned above should be called is made in function `get_lane_line_pixels` in my `p2.py` file.
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
