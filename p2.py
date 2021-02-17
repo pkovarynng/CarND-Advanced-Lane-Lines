@@ -343,7 +343,7 @@ def measure_curvature_real(binary_warped):
     
     return left_curverad, right_curverad
 
-def get_binary_image(img):
+def get_binary_image(dst):
     # Sobel kernel size: odd number, in order to smooth gradient measurements
     ksize = 7
 
@@ -490,5 +490,5 @@ def test_on_video(name):
 
 ### FUNCTION DEFINITIONS END
 
-#test_on_images()
-test_on_video("project_video")
+test_on_images()
+#test_on_video("project_video")
