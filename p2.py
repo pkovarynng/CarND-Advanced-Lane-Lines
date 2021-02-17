@@ -372,9 +372,15 @@ def process_image(img):
     # 1) Get image shape
     imshape = combined.shape
     # 2) Define 4 source points
-    srcpoints = [[190, imshape[0]], [imshape[1]//2-45, 450], [imshape[1]//2+50, 450], [imshape[1]-160, imshape[0]]]
+    srcpoints = [[190, imshape[0]],
+                [imshape[1]//2-45, 450],
+                [imshape[1]//2+50, 450],
+                [imshape[1]-160, imshape[0]]]
     # 3) Define 4 destination points
-    dstpoints = np.float32([[330, imshape[0]], [330, 0], [950, 0], [950, imshape[0]]])
+    dstpoints = np.float32([[330, imshape[0]],
+                            [330, 0],
+                            [950, 0],
+                            [950, imshape[0]]])
     # 4) Get the transformation matrix for the perspective transform
     M = cv2.getPerspectiveTransform(np.float32(srcpoints), dstpoints)
 
