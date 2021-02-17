@@ -368,14 +368,14 @@ def process_image(img):
     # Get the combined binary image using gradient/color thresholding
     combined = get_binary_image(dst)
     
+    # Prepare for warping the image
+    # 1) Get image shape
     imshape = combined.shape
-    # define 4 source points
+    # 2) Define 4 source points
     srcpoints = [[190, imshape[0]], [imshape[1]//2-45, 450], [imshape[1]//2+50, 450], [imshape[1]-160, imshape[0]]]
-
-    # define 4 destination points
+    # 3) Define 4 destination points
     dstpoints = np.float32([[330, imshape[0]], [330, 0], [950, 0], [950, imshape[0]]])
-
-    # Get the transformation matrix for the perspective transform
+    # 4) Get the transformation matrix for the perspective transform
     M = cv2.getPerspectiveTransform(np.float32(srcpoints), dstpoints)
 
     # Warp the combined binary image
@@ -457,7 +457,7 @@ def test_on_images():
     '''
     Tests the pipeline on the provided test images
     '''
-    images = glob.glob('test_images/test2.jpg')
+    images = glob.glob('test_images/*.jpg')
     for fname in images:
         # Read in the test image
         img = mpimg.imread(fname)
