@@ -148,4 +148,8 @@ Here's a [link to my video result](./project_video_result.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I can see from trying out my pipeline on the challenage videos that implementing some kind of sanity check on the polynomials could improve the results. If the sanity check fails, the polynomial should be searched from scratch, using the sliding window technique.
+
+Averaging the polynomial could smooth the little jittering of the edges of the lane drawn on the original images.
+
+Now my pipeline is more robust than the one in the introductory project, but it can still be fooled by different colors on and around the lane. Further experimenting with ways to combine the various thresholding techniques and filtering colors may also be beneficial.
