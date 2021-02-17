@@ -71,11 +71,6 @@ def calibrateCamera():
         if ret == True:
             objpoints.append(objp) # Appending the same for each image
             imgpoints.append(corners)
-            
-            ## Draw and display the corners
-            #img = cv2.drawChessboardCorners(img, (nx, ny), corners, ret)
-            #plt.imshow(img)
-            #plt.show()
         else:
             print("Finding chessboard corners failed for:", fname)
 
@@ -490,5 +485,5 @@ def test_on_video(name):
 
 ### FUNCTION DEFINITIONS END
 
-test_on_images()
-#test_on_video("project_video")
+#test_on_images()
+test_on_video("project_video")
