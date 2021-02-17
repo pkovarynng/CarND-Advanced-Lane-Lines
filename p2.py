@@ -374,20 +374,27 @@ def process_image(img):
     # 2) Define 4 source points
     srcpoints = [[190, imshape[0]],
                 [imshape[1]//2-45, 450],
-                [imshape[1]//2+50, 450],
+                [imshape[1]//2+45, 450],
                 [imshape[1]-160, imshape[0]]]
     # 3) Define 4 destination points
-    dstpoints = np.float32([[330, imshape[0]],
-                            [330, 0],
-                            [950, 0],
-                            [950, imshape[0]]])
+    dstpoints = [[330, imshape[0]],
+                [330, 0],
+                [950, 0],
+                [950, imshape[0]]]
     # 4) Get the transformation matrix for the perspective transform
-    M = cv2.getPerspectiveTransform(np.float32(srcpoints), dstpoints)
+    M = cv2.getPerspectiveTransform(np.float32(srcpoints), np.float32(dstpoints))
 
     # Warp the combined binary image
     warped_combined = cv2.warpPerspective(combined, M, (dst.shape[1], dst.shape[0]), flags=cv2.INTER_LINEAR)
     #mpimg.imsave("my_warped_example.jpg", warped_combined, cmap="gray")
 
+    # # Generates illustration for the writeup
+    # img1 = dst.copy()
+    # cv2.polylines(img1, np.array([srcpoints], np.int32), True, (255,0,0), 2)
+    # img2 = cv2.warpPerspective(dst, M, (dst.shape[1], dst.shape[0]), flags=cv2.INTER_LINEAR)
+    # cv2.polylines(img2, np.array([dstpoints], np.int32), True, (255,0,0), 2)
+    # show('Undistorted Image with source points', img1, 'Warped result with dest. points', img2, cmap1=None, cmap2=None)
+    
     ### DRAWING ####
     # In pixel space
     ploty, left_fit, right_fit = fit_polynomial(warped_combined, 1, 1)
@@ -414,7 +421,7 @@ def process_image(img):
     cv2.fillPoly(color_warp, np.int_([pts]), (0,255, 0))
 
     # Get the inverse transformation matrix for the perspective transform
-    Minv = cv2.getPerspectiveTransform(dstpoints, np.float32(srcpoints))
+    Minv = cv2.getPerspectiveTransform(np.float32(dstpoints), np.float32(srcpoints))
 
     # Warp the blank back to original image space using inverse perspective matrix (Minv)
     newwarp = cv2.warpPerspective(color_warp, Minv, (img.shape[1], img.shape[0])) 
