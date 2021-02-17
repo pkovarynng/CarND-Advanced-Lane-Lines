@@ -157,17 +157,6 @@ def dir_threshold(img, sobel_kernel=3, thresh=(0, np.pi/2)):
     # 6) Return this mask as your binary_output image
     return binary_output
 
-# For testing
-def show(title1, img1, title2, img2, cmap1=None, cmap2='gray'):
-    f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
-    f.tight_layout()
-    ax1.imshow(img1, cmap=cmap1)
-    ax1.set_title(title1, fontsize=20)
-    ax2.imshow(img2, cmap=cmap2)
-    ax2.set_title(title2, fontsize=20)
-    plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
-    plt.show()
-
 # Thresholds the S-channel of HLS
 # Exclusive lower (>) and inclusive upper (<=) bounds used
 def s_threshold(img, thresh=(0, 255)):
@@ -179,6 +168,17 @@ def s_threshold(img, thresh=(0, 255)):
     binary_output[(S > thresh[0]) & (S <= thresh[1])] = 1
     # 3) Return a binary image of threshold result
     return binary_output
+
+# For testing
+def show(title1, img1, title2, img2, cmap1=None, cmap2='gray'):
+    f, (ax1, ax2) = plt.subplots(1, 2, figsize=(24, 9))
+    f.tight_layout()
+    ax1.imshow(img1, cmap=cmap1)
+    ax1.set_title(title1, fontsize=20)
+    ax2.imshow(img2, cmap=cmap2)
+    ax2.set_title(title2, fontsize=20)
+    plt.subplots_adjust(left=0., right=1, top=0.9, bottom=0.)
+    plt.show()
 
 def get_binary_image(dst):
     # Sobel kernel size: odd number, in order to smooth gradient measurements
