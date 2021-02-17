@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 [image3]: ./output_images/binary_combo_test2.jpg "Binary Example"
 [image4]: ./output_images/warped_straight_lines1.jpg "Warp Example"
 [image5]: ./output_images/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
+[image6]: ./output_images/result_test2.jpg "Output"
 [video1]: ./project_video_result.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -120,9 +120,17 @@ This is done in real space, not in pixel space. So the `measure_curvature_real()
 
 On top of calculating the current radiuses for the current polynomials, my code stores the radiuses of maximum 75 previous iterations and calculates their average. This is done for the left and the right lines separately. So there will be two average radiuses which then will be averaged again. The result of those avarages can be seen in the video.
 
+##### Position of the vehicle
+
+This is done in lines 441 through 458 in my code in `p2.py`, so just after radius of the curvature.
+
+This one is also done in real space. So the same pixel to meter conversions are applied as for radius of the curvature.
+
+For the calculation it is assumed that the middle of the image matches on the middle axis of the car. Therefore if the car is exactly in the middle of the lane, then the image midpoint should be exactly halfway between the base points (with the highest y coordinate) of the two lane lines. If not, then the difference between the two gives the offset of the car.
+
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this step in lines 400 through 430 in my code in `p2.py`.  Here is an example of my result on a test image:
 
 ![alt text][image6]
 
