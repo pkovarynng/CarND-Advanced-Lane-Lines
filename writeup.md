@@ -21,7 +21,7 @@ The goals / steps of this project are the following:
 [image2]: ./output_images/undistorted_test2.jpg "Road Transformed"
 [image3]: ./output_images/binary_combo_test2.jpg "Binary Example"
 [image4]: ./output_images/warped_straight_lines1.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
+[image5]: ./output_images/color_fit_lines.jpg "Fit Visual"
 [image6]: ./examples/example_output.jpg "Output"
 [video1]: ./project_video_result.mp4 "Video"
 
@@ -98,9 +98,17 @@ I verified that my perspective transform was working as expected by drawing `src
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+In line 400 in my `p2.py` I call my `fit_polynomial()` function that fits a 2nd order polynomial on the left and right lane lines. This is done by collecting the pixel points of the lines first, then calling the `np.polyfit()` function for each array of pixel points separately. To illustrate the result of this, I inserted the following image:
 
 ![alt text][image5]
+
+The yellow lines are the fitted polynomials. The pixel points of the left and the right lanes that were considered when fitting the polynomial are in red and in blue, respectively. The points were collected using the sliding window technique learned in this curse.
+
+The sliding window technique uses a histogram. In addition to using only the bottom half of the binary image for the histogram, as seen in the lectures, I also used a side margin. This can be seen from line 225 through 227 in `p2.py` in the `find_lane_pixels()` function.
+
+When processing the video, the sliding window technique is used only for the first frame. From the next frame on, the pixel points for the new polynomial are collected from a hard-coded margin of 50 pixels around the previous polynomial. This is implemented by the `search_around_poly()` function in my `p2.py` file.
+
+The decision if there is a previous polynomial to be used and which of the two functions mentioned above should be called is made in function `get_lane_line_pixels` in my `p2.py` file.
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
