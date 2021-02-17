@@ -17,6 +17,13 @@ class Line():
         self.n = 75 # 3 seconds (assumed frame rate is 25 frames/sec)
         # last n radians of curvature
         self.curverads = []
+        # current fitting polynomial
+        self.current_fit = [np.array([False])]
+    
+    def clear(self):
+        self.detected = False  
+        self.curverads = []
+        self.current_fit = [np.array([False])]
         
     def append_curverad(self, curverad):
         self.curverads.append(curverad)
@@ -197,8 +204,6 @@ def hist(img):
 def find_lane_pixels(binary_warped):
     # Take a histogram of the bottom half of the image
     histogram = hist(binary_warped)
-    # Create an output image to draw on and visualize the result
-    out_img = np.dstack((binary_warped, binary_warped, binary_warped))
     # Find the peak of the left and right halves of the histogram
     # These will be the starting point for the left and right lines
     midpoint = np.int(histogram.shape[0]//2)
@@ -237,10 +242,6 @@ def find_lane_pixels(binary_warped):
         win_xright_low = rightx_current - margin
         win_xright_high = rightx_current + margin
         
-        # Draw the windows on the visualization image
-        cv2.rectangle(out_img, (win_xleft_low, win_y_low), (win_xleft_high, win_y_high), (0, 255, 0), 2)
-        cv2.rectangle(out_img, (win_xright_low,win_y_low), (win_xright_high,win_y_high), (0, 255, 0), 2)
-        
         # Identify the nonzero pixels in x and y within the window
         good_left_inds = ((nonzeroy >= win_y_low) & (nonzeroy < win_y_high) & 
         (nonzerox >= win_xleft_low) &  (nonzerox < win_xleft_high)).nonzero()[0]
@@ -271,7 +272,7 @@ def find_lane_pixels(binary_warped):
     rightx = nonzerox[right_lane_inds]
     righty = nonzeroy[right_lane_inds]
 
-    return leftx, lefty, rightx, righty, out_img
+    return leftx, lefty, rightx, righty
 
 def search_around_poly(binary_warped):
     # HYPERPARAMETER
@@ -301,14 +302,18 @@ def search_around_poly(binary_warped):
     # Return new pixel positions for polynomials
     return leftx, lefty, rightx, righty
 
-def fit_polynomial(binary_warped, ym_per_pix, xm_per_pix):
-    if lline.detected == False:
-        # Find our lane pixels first
-        leftx, lefty, rightx, righty, out_img = find_lane_pixels(binary_warped)
-    else:
+def get_lane_line_pixels(binary_warped):
+    if lline.detected == True:
         # Search for pixels around the previous polynomial
-        leftx, lefty, rightx, righty = search_around_poly(binary_warped)
-        
+        return search_around_poly(binary_warped)
+    else:
+        # Find our lane pixels first
+        return find_lane_pixels(binary_warped)
+
+def fit_polynomial(binary_warped, ym_per_pix, xm_per_pix):
+
+    leftx, lefty, rightx, righty = get_lane_line_pixels(binary_warped)
+    
     # Fit a second order polynomial to each using `np.polyfit`
     left_fit_cr = np.polyfit(lefty*ym_per_pix, leftx*xm_per_pix, 2)
     right_fit_cr = np.polyfit(righty*ym_per_pix, rightx*xm_per_pix, 2)
@@ -383,6 +388,7 @@ def process_image(img):
 
     # # for testing only:
     # show('Original Image', img, 'Undistorted Thresholded Binary', combined)
+    # show('Original Image', img, 'Undistorted Thresholded Binary', s_binary)
 
     imshape = combined.shape
     # define 4 source points
@@ -421,11 +427,6 @@ def process_image(img):
         print('The function failed to fit a line!')
         left_fitx = 1*ploty**2 + 1*ploty
         right_fitx = 1*ploty**2 + 1*ploty
-        
-    lline.current_fit = left_fit
-    lline.detected = True
-    rline.current_fit = right_fit
-    rline.detected = True
 
     # Create an image to draw the lines on
     warp_zero = np.zeros_like(warped_combined).astype(np.uint8)
@@ -475,6 +476,12 @@ def process_image(img):
         side = 'right'
     offset_text  = 'Vehicle is {} cm {} of center'.format(abs(offset), side)
     cv2.putText(result,  offset_text, (50,100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+
+    # Tracking
+    lline.current_fit = left_fit
+    lline.detected = True
+    rline.current_fit = right_fit
+    rline.detected = True
     
     # Return the result image
     return result
@@ -496,8 +503,8 @@ def test_on_images():
         plt.imshow(result)
         plt.show()
         # Forget stored image data
-        lline = Line()
-        rline = Line()
+        lline.clear()
+        rline.clear()
 
 def test_on_video(name):
     '''
@@ -505,7 +512,7 @@ def test_on_video(name):
     '''
     input = name+'.mp4'
     white_output = name+'_result.mp4'
-    clip1 = VideoFileClip(input) #.subclip(37,43)
+    clip1 = VideoFileClip(input)
     white_clip = clip1.fl_image(process_image)
     white_clip.write_videofile(white_output, audio=False)    
 
