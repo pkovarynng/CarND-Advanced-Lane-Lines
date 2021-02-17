@@ -342,14 +342,8 @@ def measure_curvature_real(binary_warped):
     right_curverad = ((1 + (2*right_fit[0]*y_eval*ym_per_pix + right_fit[1])**2)**1.5) / np.absolute(2*right_fit[0])
     
     return left_curverad, right_curverad
-    
-def process_image(img):
-    '''
-    Implements the pipeline - processes one image/frame
-    '''
-    # Undistort the image: gets the so called destination image
-    dst = cv2.undistort(img, mtx, dist, None, mtx)
 
+def get_binary_image(img):
     # Sobel kernel size: odd number, in order to smooth gradient measurements
     ksize = 7
 
@@ -367,7 +361,18 @@ def process_image(img):
     # # for testing only:
     # show('Original Image', img, 'Undistorted Thresholded Binary', combined)
     # show('Original Image', img, 'Undistorted Thresholded Binary', s_binary)
+    return combined
+    
+def process_image(img):
+    '''
+    Implements the pipeline - processes one image/frame
+    '''
+    # Undistort the image: gets the so called destination image
+    dst = cv2.undistort(img, mtx, dist, None, mtx)
 
+    # Get the combined binary image using gradient/color thresholding
+    combined = get_binary_image(dst)
+    
     imshape = combined.shape
     # define 4 source points
     srcpoints = [[190, imshape[0]], [imshape[1]//2-45, 450], [imshape[1]//2+50, 450], [imshape[1]-160, imshape[0]]]
