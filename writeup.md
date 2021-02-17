@@ -112,7 +112,13 @@ The decision about which of the two functions mentioned above should be called i
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+##### Radius of the curvature
+
+I did this in lines 433 through 439 in my code in `p2.py`.
+
+This is done in real space, not in pixel space. So the `measure_curvature_real()` uses the pixel to meter conversions as advised. This function carculates the current radius based on the fitted polynomials and the learned formula. The radius is calculated for the coordinates of the points where the polynomials reach the bottom of the image (they are the closest to the car).
+
+On top of calculating the current radiuses for the current polynomials, my code stores the radiuses of maximum 75 previous iterations and calculates their average. This is done for the left and the right lines separately. So there will be two average radiuses which then will be averaged again. The result of those avarages can be seen in the video.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
