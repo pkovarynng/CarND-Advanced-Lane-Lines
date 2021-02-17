@@ -80,7 +80,7 @@ The code for my perspective transform can be found in the `process_image()` func
     dstpoints = [[330, imshape[0]],
                 [330, 0],
                 [950, 0],
-                [950, imshape[0]]])
+                [950, imshape[0]]]
 ```
 
 This resulted in the following source and destination points:
