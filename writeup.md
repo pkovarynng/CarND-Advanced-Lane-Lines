@@ -83,7 +83,7 @@ Here's an example of my output for this step.
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform can be found in the `process_image()` function from lines 341 through 383 in the file `p2.py`. The perspective transform is performed on the binary combo image based on the source (`srcpoints`) and destination (`dstpoints`) points.  I chose to hardcode the source and destination points in the following manner:
+The code for my perspective transform can be found in the `process_image()` function from lines 341 through 383 in the file `p2.py`. The perspective transform is performed on the binary combo image from the previous step based on the source (`srcpoints`) and destination (`dstpoints`) points.  I chose to hardcode the source and destination points in the following manner:
 
 ```python
     # 2) Define 4 source points
@@ -106,6 +106,8 @@ This resulted in the following source and destination points:
 | 595, 450      | 330, 0        |
 | 685, 450      | 950, 0        |
 | 1120, 720     | 950, 720      |
+
+For the actual perspective I create the transformation matrix by calling `cv2.getPerspectiveTransform()`. Then to perform the actual perspective transform I call `cv2.warpPerspective()`.
 
 I verified that my perspective transform was working as expected by drawing `srcpoints` and `dstpoints` onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
