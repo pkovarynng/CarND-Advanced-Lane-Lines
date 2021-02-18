@@ -33,7 +33,7 @@ The goals / steps of this project are the following:
 
 ### Writeup / README
 
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
+#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.
 
 This is my Writeup, please carry on reading it!
 
@@ -51,12 +51,19 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 The `cv2.findChessboardCorners()` function failed for three of the calibration images. Could be that they don't have the sufficient white border around the edges.
 
+The camera calibration step returns the following important pieces of information that will be used in the first step of my image processing pipeline, the distortion correction:
+1. calibration matrix
+2. distortion coefficients
+
 ### Pipeline (single images)
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
+To demonstrate this step, I include the following distortion-corrected test image:
+
 ![alt text][image2]
+
+The distortion-correction is performed using the `cv2.undistort()` function, the camera calibration matrix and the distortion coefficients returned from the camera calibration. The call to this OpenCV function can be found in my `process_image()` function in line 366 in the `p2.py` file.
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
