@@ -107,7 +107,7 @@ This resulted in the following source and destination points:
 | 685, 450      | 950, 0        |
 | 1120, 720     | 950, 720      |
 
-For the actual perspective I create the transformation matrix by calling `cv2.getPerspectiveTransform()`. Then to perform the actual perspective transform I call `cv2.warpPerspective()`.
+For the perspective transform I create the transformation matrix by calling `cv2.getPerspectiveTransform()`. Then to perform the actual perspective transform I call `cv2.warpPerspective()`.
 
 I verified that my perspective transform was working as expected by drawing `srcpoints` and `dstpoints` onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
