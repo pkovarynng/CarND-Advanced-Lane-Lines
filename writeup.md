@@ -69,6 +69,14 @@ The distortion-correction is performed using the `cv2.undistort()` function. The
 
 I used a combination of color and gradient thresholds to generate a binary image. The thresholding steps can be found in the `p2.py` file at lines 105 through 202. There are individual functions for each thresholding method and there is the function `get_binary_image()` that calls the others and combines their result into a single binary image.
 
+I used thresholds for the following:
+1. Gradient by applying Sobel, both in x and y directions, as can be seen in my `abs_sobel_thresh()` function in line 105 through 123 in the file called `p2.py`
+2. Magnitude of the gradient, as can be seen in my `mag_thresh()` function in line 125 through 140 in the file called `p2.py`
+3. Direction of the gradient, as can be seen in my `dir_threshold` function in line 142 through 158 in the file called `p2.py`
+4. S-channel of HLS color space, as can be seen in my `dir_threshold` function in line 160 through 170 in the file called `p2.py`
+
+Function `get_binary_image()` combines the results of the above functions into a single binary image.
+
 Here's an example of my output for this step.
 
 ![alt text][image3]
