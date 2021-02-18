@@ -63,7 +63,7 @@ To demonstrate this step, I include the following distortion-corrected test imag
 
 ![alt text][image2]
 
-The distortion-correction is performed using the `cv2.undistort()` function, the camera calibration matrix and the distortion coefficients returned from the camera calibration. The call to this OpenCV function can be found in my `process_image()` function in line 366 in the `p2.py` file.
+The distortion-correction is performed using the `cv2.undistort()` function. The call to this OpenCV function can be found in my `process_image()` function in line 366 in the `p2.py` file. It uses the camera calibration matrix and the distortion coefficients returned from the camera calibration.
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
